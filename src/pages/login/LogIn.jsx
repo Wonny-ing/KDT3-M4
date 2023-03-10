@@ -93,7 +93,12 @@ export const LogIn = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      email: 'admin@admin.com',
+      password: 'adminadmin',
+    },
+  });
 
   const onValid = async ({ email, password }) => {
     const { displayName, profileImg, accessToken } = await logIn({ email, password });
@@ -122,7 +127,7 @@ export const LogIn = () => {
               })}
               type="text"
               placeholder="email"
-              value="admin@admin.com"
+              // value="admin@admin.com"
             />
             <Input
               {...register('password', {
@@ -130,7 +135,7 @@ export const LogIn = () => {
               })}
               placeholder="password"
               type="password"
-              value="adminadmin"
+              // value="adminadmin"
             />
           </InputContainer>
 

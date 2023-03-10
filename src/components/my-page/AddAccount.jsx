@@ -15,6 +15,7 @@ export const AddAccount = () => {
   const navigate = useNavigate();
 
   const { isLoading, data: banks } = useQuery(['availableBanks'], () => getAvailableBank({ accessToken }));
+
   const connectNewAccount = useMutation(({ accessToken, inputData }) => addAccount({ accessToken, inputData }), {
     onSuccess: () => {
       alert('계좌가 성공적으로 연결되었습니다.');
