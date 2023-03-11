@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { AiFillCloseCircle } from 'react-icons/ai';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -15,14 +15,22 @@ export const TransactionDetail = () => {
   const orderButton = ['Confirm', 'Cancel'];
   const handleClick = async (event) => {
     const menu = event.target.innerText;
-
     const detailId = event.target.dataset.id;
-    await handleOrder({ menu, accessToken, detailId });
-    navigate('/mypage/myorder');
+    confirmOrCancelOrder.mutate({ menu, accessToken, detailId });
   };
 
   const { isLoading, data: orderDetail } = useQuery(['myOrder', `${detailId}`], () =>
     getOrderDetail({ accessToken, detailId }),
+  );
+  const queryClient = useQueryClient();
+  const confirmOrCancelOrder = useMutation(
+    ({ menu, accessToken, detailId }) => handleOrder({ menu, accessToken, detailId }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['myOrder']);
+        navigate('/mypage/myorder');
+      },
+    },
   );
 
   if (isLoading) return <LoadingModal />;
