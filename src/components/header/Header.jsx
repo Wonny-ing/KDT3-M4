@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams, useLocation, NavLink } from 'react-router-dom';
 import { BsBag } from 'react-icons/bs';
-import { CiSearch } from 'react-icons/ci';
-import { adminUser } from '../../api/adminUser';
+import { AiOutlineEdit } from 'react-icons/ai';
 import RecentlyViewed from '../recently-viewed/RecentlyViewed';
 import { useController, useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -10,12 +9,14 @@ import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { useMotionValueEvent, useScroll } from 'framer-motion';
 import { AiOutlineSearch } from 'react-icons/ai';
 import useInputFocus from 'util/useInputFocus';
-import { useRecoilValue } from 'recoil';
-import { loginState } from 'recoil/userInfo';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { loginState, userInfoState } from 'recoil/userInfo';
 import useCart from 'util/useCart';
 
 export default function Header() {
   const { scrollY } = useScroll();
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+
   const isLoggedIn = useRecoilValue(loginState);
   /* 검색 기능 */
   const navigate = useNavigate();
@@ -120,6 +121,12 @@ export default function Header() {
                 <Link to="/login">
                   <li>LOGIN</li>
                 </Link>
+              )}
+              {isLoggedIn && userInfo.isAdmin && (
+                <li>
+                  <AiOutlineEdit />
+                  <Link to="/admin">ADMIN</Link>
+                </li>
               )}
             </User>
           </Right>
